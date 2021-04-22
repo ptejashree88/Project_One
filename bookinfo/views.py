@@ -1,11 +1,13 @@
+from django.db import connection, transaction
+from django.http import JsonResponse
 from django.shortcuts import render
-from bookinfo.models import Book
-from rest_framework.viewsets import ModelViewSet
-from bookinfo.serializers import BookSerializer
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.http import JsonResponse
-from rest_framework import status
+from rest_framework.viewsets import ModelViewSet
+
+from bookinfo.models import Book
+from bookinfo.serializers import BookSerializer
 
 
 class BookViewSet(ModelViewSet):
@@ -36,3 +38,19 @@ class BookViewSet(ModelViewSet):
 class BookListViewSet():
     queryset = Book.objects.filter(is_deleted=False)
     serializer_class = BookSerializer
+
+
+def my_custom_sql():
+    cursor = connection.cursor()
+
+    # Data modifying operation - commit required
+    cursor.execute("insert into bar SET foo = 1 WHERE baz = %s", [self.baz])
+    transaction.commit_unless_managed()
+
+    # Data retrieval operation - no commit required
+    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+    row = cursor.fetchone()
+
+    return row
+
+

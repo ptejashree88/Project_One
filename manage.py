@@ -15,12 +15,6 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
 
-def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Book.settings')
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
 
 
 if __name__ == '__main__':
