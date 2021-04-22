@@ -30,3 +30,19 @@ class BookViewSet(ModelViewSet):
         ret_val = book_obj.get_total_price()  # float
         python_dict = {"Book Total Price": ret_val}
         return JsonResponse(python_dict)
+
+
+
+def my_custom_sql():
+    from django.db import connection, transaction
+    cursor = connection.cursor()
+
+    # Data modifying operation - commit required
+    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+    transaction.commit_unless_managed()
+
+    # Data retrieval operation - no commit required
+    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+    row = cursor.fetchone()
+
+    return row
