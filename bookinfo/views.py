@@ -30,3 +30,9 @@ class BookViewSet(ModelViewSet):
         ret_val = book_obj.get_total_price()  # float
         python_dict = {"Book Total Price": ret_val}
         return JsonResponse(python_dict)
+
+
+
+class BookListViewSet():
+    queryset = Book.objects.filter(is_deleted=False)
+    serializer_class = BookSerializer
