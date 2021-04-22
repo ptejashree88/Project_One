@@ -32,13 +32,12 @@ class BookViewSet(ModelViewSet):
         return JsonResponse(python_dict)
 
 
-
+from django.db import connection, transaction
 def my_custom_sql():
-    from django.db import connection, transaction
     cursor = connection.cursor()
 
     # Data modifying operation - commit required
-    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+    cursor.execute("insert into bar SET foo = 1 WHERE baz = %s", [self.baz])
     transaction.commit_unless_managed()
 
     # Data retrieval operation - no commit required
@@ -46,3 +45,5 @@ def my_custom_sql():
     row = cursor.fetchone()
 
     return row
+
+
